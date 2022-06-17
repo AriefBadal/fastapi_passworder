@@ -2,13 +2,11 @@ import traceback
 import uvicorn
 import yaml
 from typing import Optional
-
 from fastapi import FastAPI, HTTPException
-
 from passworder import Passworder
 from random_password import get_random_salt
 from pydantic import BaseModel
-
+import logging
 
 class EncryptRequest(BaseModel):
     salt: Optional[str] = None
@@ -26,6 +24,11 @@ if not settings["openapi_console"]:
 app = FastAPI(**main_parameters)
 passworder = Passworder()
 
+def password_logger():
+    # Configuration for the logger
+    logging.basicConfig(level=logging.INFO, filename="passworder.log", filemode="w",
+    format="%(asctime)s - %(levelname)s - %(message)s")
+    return logging.info(f'There was a new password request')
 
 @app.get("/encrypt/generators")
 async def generators_list():
@@ -44,6 +47,8 @@ async def show_version():
 
 @app.post("/encrypt/")
 async def encrypt(encrypt_request: EncryptRequest):
+    # Calling the password_logger function to log new requests
+    password_logger()
     result = {}
     try:
         # Request validation steps..
@@ -51,7 +56,6 @@ async def encrypt(encrypt_request: EncryptRequest):
             raise HTTPException(status_code=400, detail="Missing cleartext entry to encrypt")
         if not encrypt_request.random_salt and not encrypt_request.salt:
             raise HTTPException(status_code=400, detail="Either random salt or a set salt should be given")
-
         parameters = encrypt_request.dict()
 
         # It could be a random salt was requested. In this case, generate one
@@ -66,8 +70,9 @@ async def encrypt(encrypt_request: EncryptRequest):
             "shadow_string": shadow_string,
             "salt": parameters["salt"],
         }
+        
     except HTTPException as e:
-        # Raising the HTTP exception here, otherwise it will be picked up by
+        # Reraising the HTTP exception here, otherwise it will be picked up by
         # the generic exception handler
         raise e
     except Exception as e:
