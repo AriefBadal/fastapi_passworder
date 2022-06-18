@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  passworder:
+    build: .
+    ports:
+      - "80:8000"
+    volumes:
+      - fastapi_passworder_passworder-volume:/code
+volumes:
+  fastapi_passworder_passworder-volume:
