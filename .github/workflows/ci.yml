@@ -15,7 +15,7 @@ jobs:
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Linting with Flake8
-        run: flake8 . --count --exit-zero --max-complexity=10 --max-line length='127' --statistics
+        run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       # The next steps should be added by you!
       # - Test the code with flake8
       # - Run the unittests
