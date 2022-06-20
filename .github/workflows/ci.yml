@@ -18,8 +18,11 @@ jobs:
         run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run unittests
         run: python3 -m unittest discover .
-        
+      - name: Building the docker image
+        run: docker compose up
+      - name: Check running containers
+        run: docker ps --all
+
       # The next steps should be added by you!
-      # - Run the unittests
       # - Build the docker image
       # - Push the docker image to hub.docker.com (you'll need an account there!)
