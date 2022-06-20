@@ -1,5 +1,5 @@
 import logging
-# OPDRACHT 3: logging   
+# Passworder logger
 async def password_logger():
     # Configuration for the logger
     logging.basicConfig(level=logging.INFO, filename="passworder.log", filemode="w",

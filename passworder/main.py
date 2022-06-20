@@ -47,7 +47,7 @@ async def show_version():
 
 @app.post("/encrypt/")
 async def encrypt(encrypt_request: EncryptRequest):
-    # Calling the password_logger function to log new requests
+    # Calling the password_logger function to log new requests for a password
     password_logger()
     result = {}
     try:
