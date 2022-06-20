@@ -4,5 +4,7 @@ services:
     build: .
     ports:
       - "80:8000"
-  redis:
-    image: "redis:alpine"
+    volumes:
+      - fastapi_passworder_passworder-volume:/code
+volumes:
+  fastapi_passworder_passworder-volume:
