@@ -8,6 +8,7 @@ from random_password import get_random_salt
 from pydantic import BaseModel
 import logging
 
+
 class EncryptRequest(BaseModel):
     salt: Optional[str] = None
     cleartext: str
@@ -24,11 +25,14 @@ if not settings["openapi_console"]:
 app = FastAPI(**main_parameters)
 passworder = Passworder()
 
+
 def password_logger():
     # Configuration for the logger
-    logging.basicConfig(level=logging.INFO, filename="passworder.log", filemode="w",
-    format="%(asctime)s - %(levelname)s - %(message)s")
-    return logging.info(f'There was a new password request')
+    logging.basicConfig(
+        level=logging.INFO, filename="passworder.log", filemode="w",
+        format="%(asctime)s - %(levelname)s - %(message)s")
+    return logging.info('There was a new password request')
+
 
 @app.get("/encrypt/generators")
 async def generators_list():
@@ -42,20 +46,29 @@ async def show_version():
             version = version_file.read()
             version = version.strip()
         return {"version": version}
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=503, detail="Version file missing or not readeable")
+    except FileNotFoundError:
+        raise HTTPException(
+            status_code=503, detail="Version file missing or not readeable")
+
 
 @app.post("/encrypt/")
 async def encrypt(encrypt_request: EncryptRequest):
-    # Calling the password_logger function to log new requests for a password
+    # Calling the password_logger function to log
+    # new requests for a new password
     password_logger()
     result = {}
     try:
         # Request validation steps..
         if not encrypt_request.cleartext:
-            raise HTTPException(status_code=400, detail="Missing cleartext entry to encrypt")
+            raise HTTPException(
+                status_code=400, detail="Missing cleartext entry to encrypt"
+                )
+
         if not encrypt_request.random_salt and not encrypt_request.salt:
-            raise HTTPException(status_code=400, detail="Either random salt or a set salt should be given")
+            raise HTTPException(
+                status_code=400,
+                detail="Either random salt or a set salt should be given"
+                )
         parameters = encrypt_request.dict()
 
         # It could be a random salt was requested. In this case, generate one
@@ -70,7 +83,7 @@ async def encrypt(encrypt_request: EncryptRequest):
             "shadow_string": shadow_string,
             "salt": parameters["salt"],
         }
-        
+
     except HTTPException as e:
         # Reraising the HTTP exception here, otherwise it will be picked up by
         # the generic exception handler
@@ -84,5 +97,7 @@ async def encrypt(encrypt_request: EncryptRequest):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app="main:app", reload=settings["reload"], host=settings["listen_address"],
-                port=settings["listen_port"])
+    uvicorn.run(
+        app="main:app", reload=settings["reload"],
+        host=settings["listen_address"],
+        port=settings["listen_port"])
