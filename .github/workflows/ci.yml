@@ -19,9 +19,7 @@ jobs:
       - name: Run unittests
         run: python3 -m unittest discover .
       - name: Building the docker image
-        run: docker compose up
-      - name: stop container 
-        run: docker container stop fastapi_passworder-passworder-1
+        run: docker build -t arief458/passworder .
 
       # The next steps should be added by you!
       # - Build the docker image
