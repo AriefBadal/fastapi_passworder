@@ -20,8 +20,8 @@ jobs:
         run: python3 -m unittest discover .
       - name: Building the docker image
         run: docker build -t arief458/passworder .
-      -name: Push image to hub.docker.com
-        run: docker push arief458/passworder
+      - name: Push image to hub.docker.com
+        run: docker push arief458/passworder:latest
 
       # The next steps should be added by you!
       # - Build the docker image
