@@ -18,10 +18,16 @@ jobs:
         run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run unittests
         run: python3 -m unittest discover .
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.USER_NAME}}
+          DOCKER_PASSWORD: ${{secrets.PASSWORD}}
+          run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Building the docker image
         run: docker build -t arief458/passworder .
       - name: Push image to hub.docker.com
-        run: docker push arief458/passworder:latest
+        run: docker push ${{secrets.DOCKER_USER}}/passworder:latest
 
       # The next steps should be added by you!
       # - Build the docker image
