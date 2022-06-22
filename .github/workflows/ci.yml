@@ -27,7 +27,7 @@ jobs:
       - name: Building the docker image
         run: docker build -t arief458/passworder .
       - name: Push image to hub.docker.com
-        run: docker push ${{secrets.DOCKER_USER}}/passworder:latest
+        run: docker push ${{secrets.DOCKER_USER}}/passworder
 
       # The next steps should be added by you!
       # - Build the docker image
