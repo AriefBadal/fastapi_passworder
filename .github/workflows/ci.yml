@@ -25,7 +25,7 @@ jobs:
           DOCKER_PASSWORD: ${{secrets.PASSWORD}}
         run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Building the docker image
-        run: docker build -t passworder .
+        run: docker build -t ${{secrets.DOCKER_USER}}/ci_fastapi_passworder .
       - name: Push image to hub.docker.com
         run: docker push ${{secrets.DOCKER_USER}}/ci_fastapi_passworder
 
