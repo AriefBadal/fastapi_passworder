@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 from passworder import Passworder
-from passworder.random_password import get_random_password, get_random_salt
+from random_password import get_random_password, get_random_salt
 import sys
 import os
 
