@@ -5,10 +5,9 @@ DIRECTORY="passworder_test"
 STATUS_CODE=$?
 
 git clone $GIT_REPO $DIRECTORY
-cd -- "/home/arief/Sysops_excercises/$DIRECTORY"
+cd -- "../Sysops_excercises/$DIRECTORY"
 
 python3 -m unittest discover .
-sleep 2
 
 if [ $STATUS_CODE != 0 ] || [ -d $DIRECTORY ] ; then
     echo "Unit test has failed, Check if folder $DIRECTORY exists"
@@ -19,14 +18,15 @@ else
     pip3 install -r requirements.txt --upgrade
     echo "Clone of repo successfull"
 fi
-    echo "Working directory is $(pwd)"
 
 # Set the version of the passworder application in version.txt
-touch version.txt
-git describe --tags > version.txt
-echo "New version of passworder is is $(cat version.txt)"
-cd ..
+cd passworder
 echo "Working directory is $(pwd)"
+git describe --tags > version.txt
+
+echo "New version of passworder is is $(cat version.txt)"
+cd ~/repo_clone/fastapi_passworder/Sysops_excercises/
+
 mv passworder_test passworder
 cd passworder/passworder
 python3 main.py
